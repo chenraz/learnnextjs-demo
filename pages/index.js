@@ -1,31 +1,37 @@
-import Layout from '../components/MyLayout.js'
-import Link from 'next/link'
-import fetch from 'isomorphic-unfetch'
+import Layout from "../components/MyLayout.js";
+import Link from "next/link";
+import fetch from "isomorphic-unfetch";
 
-const Index = (props) => (
+const Index = props => (
   <Layout>
-    <h1>Batman TV Shows</h1>
+    <h1>Swan Collection</h1>
     <ul>
-      {props.shows.map(({show}) => (
-        <li key={show.id}>
-          <Link as={`/p/${show.id}`} href={`/post?id=${show.id}`}>
-            <a>{show.name}</a>
+      {props.products.map(product => (
+        <li key={product.id}>
+          <Link
+            as={`/product/${product.id}`}
+            href={`/product?id=${product.id}`}
+          >
+            <a>{product.title.rendered}</a>
           </Link>
         </li>
       ))}
     </ul>
   </Layout>
-)
+);
 
 Index.getInitialProps = async function() {
-  const res = await fetch('https://api.tvmaze.com/search/shows?q=batman')
-  const data = await res.json()
+  // const res = await fetch('https://api.tvmaze.com/search/shows?q=batman')
+  const res = await fetch(
+    "http://swancollections.tilnet.co.il/wp-json/wp/v2/product"
+  );
+  const data = await res.json();
 
-  console.log(`Show data fetched. Count: ${data.length}`)
+  console.log(`Products data fetched. Count: ${data.length}`);
 
   return {
-    shows: data
-  }
-}
+    products: data
+  };
+};
 
-export default Index
+export default Index;
